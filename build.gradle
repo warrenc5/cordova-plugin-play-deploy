@@ -1,0 +1,57 @@
+configurations.all {
+  resolutionStrategy {
+    cacheChangingModulesFor 0, 'seconds'
+    cacheDynamicVersionsFor 0, 'seconds'
+  }
+}
+
+buildscript {
+  dependencies {
+    //classpath 'com.android.tools.build:gradle:3.0.0'
+    classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
+  }
+
+  repositories {
+    mavenCentral()
+      jcenter()
+      maven {
+        url "https://maven.google.com"
+      }
+      maven {
+        url "http://blue:8081/nexus/content/repositories/snapshots/"
+      }
+  }
+}
+
+android {
+  compileSdkVersion = 22
+}
+
+//apply plugin: de.triplet.gradle.play.PlayPublisherPlugin
+apply plugin: 'com.github.triplet.play'
+
+android {
+
+  playAccountConfigs {
+    defaultAccountConfig {
+      jsonFile = file('../../Google Play Android Developer-07b05227da33.jsonkey-from-IAM.p12')
+    }
+  }
+
+  defaultConfig {
+
+  compileSdkVersion = 16
+    playAccountConfig = playAccountConfigs.defaultAccountConfig
+  }
+
+  packagingOptions {
+    pickFirst "anyFileWillDo"
+      exclude "/META-INF/**"
+  }
+}
+
+play {
+  track = 'beta'
+    untrackOld = true // will untrack 'alpha' while upload to 'beta'
+}
+
