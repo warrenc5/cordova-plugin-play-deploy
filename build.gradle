@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 configurations.all {
   resolutionStrategy {
     cacheChangingModulesFor 0, 'seconds'
@@ -17,11 +19,24 @@ buildscript {
       maven {
         url "https://maven.google.com"
       }
-      maven {
-        url "http://blue:8081/nexus/content/repositories/snapshots/"
-      }
   }
 }
+
+def inputFile = new File("./platforms/android/android.json")
+def jsonConfig = new JsonSlurper().parseText(inputFile.text)
+def iamFileLocation = jsonConfig.installed_plugins."cordova-plugin-play-deploy".IAM_SERVICE_ACCOUNT_JSON_FILE_LOCATION
+def track = jsonConfig.installed_plugins."cordova-plugin-play-deploy".TRACK
+def untrackOld = jsonConfig.installed_plugins."cordova-plugin-play-deploy".UNTRACK_OLD
+
+if(track == null) {
+  track = 'beta'
+}
+
+if(untrackOld == null) {
+  untrackOld = false
+}
+def iamFile = new File(iamFileLocation)
+  println "using play account config file " + iamFile.getAbsolutePath() 
 
 android {
   compileSdkVersion = 22
@@ -34,7 +49,7 @@ android {
 
   playAccountConfigs {
     defaultAccountConfig {
-      jsonFile = file('../../Google Play Android Developer-07b05227da33.jsonkey-from-IAM.p12')
+       jsonFile = file(iamFile.getAbsolutePath())
     }
   }
 
@@ -51,7 +66,8 @@ android {
 }
 
 play {
-  track = 'beta'
-    untrackOld = true // will untrack 'alpha' while upload to 'beta'
+  track = track
+  untrackOld = untrackOld
 }
 
+  

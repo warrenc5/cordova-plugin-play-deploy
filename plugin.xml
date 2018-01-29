@@ -2,15 +2,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-play-deploy"
     version="1.0.0">
-<name>cordova-plugin-play-deploy</name>
+  <name>cordova-plugin-play-deploy</name>
+  <description>build time play publish</description>
+  <preference name="IAM_SERVICE_ACCOUNT_JSON_FILE_LOCATION" />
 
-<engines>
-  <engine name="cordova-android" version=">=1.4.0" />
-</engines>
+  <engines>
+    <engine name="cordova-android" version=">=1.4.0" />
+  </engines>
 
-<!--
-<framework src="com.github.triplet.gradle:play-publisher:1.2.0" />
--->
-<framework src="build.gradle" custom="true" type="gradleReference" />
+  <!--
+  <framework src="com.github.triplet.gradle:play-publisher:1.2.0" />
+  -->
+  <framework src="build.gradle" custom="true" type="gradleReference" />
+
+  <config-file target="res/values/strings.xml" parent="/*">
+    <string name="iam_service_account_json">$IAM_SERVICE_ACCOUNT_JSON_FILE_LOCATION</string>
+    <string name="track">$TRACK</string>
+    <string name="untrackOld">$UNTRACK_OLD</string>
+  </config-file>
+
 </plugin>
 
