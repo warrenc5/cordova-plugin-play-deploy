@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "warren crossing",
-  "license": "ISC"
+  "license": "ISC",
   "repository": {
     "url": "https://github.com/warrenc5/cordova-plugin-play-deploy.git"
   }
